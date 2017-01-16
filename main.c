@@ -1,5 +1,19 @@
 #include <stdio.h>
 
+static print(doline, doword, dochar, linect, wordct, charct, file)
+	int	doline,	doword, dochar;
+	int	linect, wordct, charct;
+	char	*file;    
+{
+	if (doline)
+		printf(" %7ld", linect);
+	if (doword)
+		printf(" %7ld", wordct);
+	if (dochar)
+		printf(" %7ld", charct);
+	printf(" %s\n", file);
+}
+
 main(argc,argv)
 	int argc;
 	char **argv;
@@ -63,16 +77,4 @@ main(argc,argv)
 	return 0;
 }
 
-static print(doline, doword, dochar, linect, wordct, charct, file)
-	int	doline,	doword, dochar;
-	int	linect, wordct, charct;
-	char	*file;    
-{
-	if (doline)
-		printf(" %7ld", linect);
-	if (doword)
-		printf(" %7ld", wordct);
-	if (dochar)
-		printf(" %7ld", charct);
-	printf(" %s\n", file);
-}
+
