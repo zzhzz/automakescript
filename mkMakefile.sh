@@ -1,12 +1,14 @@
+#!/bin/bash
+
 MAINFILENAME=
 OUTPUTFILENAME=
 PROGRAMVERSION=
 DIRTYPE=
-SOURCELIST=$(ls | gawk '/\.[ch]/{print $0}')
 CPPFLAGS=""
 LDFLAGS=""
 LDADD=""
 INCLUDEDIR=""
+PROJECTPATH=""
 
 while getopts :f:o:v:D:L:I:C opt
 do 
@@ -18,7 +20,7 @@ do
 	C) CPPFLAGS="$CPPFLAGS $OPTARG";;
 	L) LDFLAGS="$LDFLAGS $OPTARG";;
 	I) INCLUDEDIR="$INCLUDEDIR $OPTARG";;
-	*) echo "unknown option: ${opt}";;
+	*) echo "unknown option: ${opt} $OPTARG";;
 	esac
 done
 	
@@ -45,8 +47,9 @@ then
 	
 	echo "No directory type specified, please use -D option"
 	exit 1;
-
 fi
+
+SOURCELIST=$(ls | gawk '/\.[ch]/{print $0}')
 
 for NAME in $SOURCELIST
 do 
@@ -54,6 +57,7 @@ do
 done
 
 autoscan
+echo "scan successfully"
 
 mv configure.scan configure.ac
 
@@ -64,7 +68,6 @@ FLAT)
 	sed 	"/AC_CONFIG_SRCDIR/s/\[.*\]/$MAINFILENAME/
 		/AC_CONFIG_HEADERS/a\AM_INIT_AUTOMAKE($OUTPUTFILENAME,$PROGRAMVERSION)
 		/AC_OUTPUT/c\AC_OUTPUT(Makefile)" configure.ac > tempfile 
-
 	mv tempfile configure.ac
 
 	echo \
